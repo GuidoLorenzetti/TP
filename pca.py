@@ -56,7 +56,7 @@ z = pcaWines['PC3']
 colors = pcaWines['colors']
 print(colors)
 # Crea un gráfico de dispersión 3D
-scatter = ax.scatter(x, y, z, c=colors, marker='o', label='3D PCA Scatter Plot')
+scatter = ax.scatter(x, y, z, c=colors, marker='o', label='3D PCA Scatter Plot') #Error acá, no se porque, funciona en jupyter pero no en script.
 
 # Configura etiquetas de los ejes
 ax.set_xlabel('PC1')
