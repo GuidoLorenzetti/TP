@@ -30,18 +30,18 @@ df['Colores'] = df['label'].map(color_dict)
 
 df['label']=df['label'].astype('category')
 
-Wines = df[['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall']]
+xWines = df[['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall']]
 yWines = df['label']
 
 xWines_scaled = sk.preprocessing.StandardScaler().fit_transform(xWines)
 
 ####2D########
-isomapWheat = Isomap(n_neighbors=6, n_components=3)
-isomapWheat.fit(xWines_scaled)
-manifold_2Da = isomapWheat.transform(xWines_scaled)
-manifold_2D = pd.DataFrame(manifold_2Da,
-    columns=['Component 1', 'Component 2','Component 3'])
-manifold_2D['category'] = yWines.to_numpy()
+# isomapWheat = Isomap(n_neighbors=6, n_components=2)
+# isomapWheat.fit(xWines_scaled)
+# manifold_2Da = isomapWheat.transform(xWines_scaled)
+# manifold_2D = pd.DataFrame(manifold_2Da,
+#     columns=['Component 1', 'Component 2'])
+# manifold_2D['category'] = yWines.to_numpy()
 
 # groups = manifold_2D.groupby('category')
 # plt.title('2D Isomap Graph')
@@ -49,6 +49,14 @@ manifold_2D['category'] = yWines.to_numpy()
 #     plt.plot(group['Component 1'], group['Component 2'], marker='o', linestyle='', markersize=5, label=name)
 # plt.legend()
 
-fig = px.scatter_3d(manifold_2D, x='Component 1', y='Component 2', z='Component 3', color='category',
+
+####3D########
+isomapWheat = Isomap(n_neighbors=6, n_components=3)
+isomapWheat.fit(xWines_scaled)
+manifold_3Da = isomapWheat.transform(xWines_scaled)
+manifold_3D = pd.DataFrame(manifold_3Da,
+    columns=['Component 1', 'Component 2','Component 3'])
+manifold_3D['category'] = yWines.to_numpy()
+fig = px.scatter_3d(manifold_3D, x='Component 1', y='Component 2', z='Component 3', color='category',
                     title='3D Isomap Graph')
 fig.show()
