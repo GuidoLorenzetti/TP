@@ -1,3 +1,4 @@
+from sklearn.manifold import TSNE
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -10,6 +11,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from sklearn.preprocessing import StandardScaler
 from sklearn.manifold import Isomap
 
+""" t-SNE """
 df = pd.read_csv('Crop_recommendation.csv')
 
 # Utiliza seaborn para generar una paleta de colores única basada en los valores únicos en la columna 'Datos'
@@ -43,28 +45,17 @@ xWS_df['Colores']=df['Colores']
 
 #xWheat_scaled = sk.preprocessing.StandardScaler().fit_transform(xWheat)
 
-####2D########
-# plt.figure(figsize=(8, 6))  # Ajusta el tamaño del gráfico
-# isomapWheat = Isomap(n_neighbors=20, n_components=2)
-# isomapWheat.fit(xWheat_scaled)
-# manifold_2Da = isomapWheat.transform(xWheat_scaled)
-# manifold_2D = pd.DataFrame(manifold_2Da, columns=['Component 1', 'Component 2'])
-# manifold_2D['category'] = yWheat.to_numpy()
+tsneWheat = TSNE(n_components=2, verbose=1, perplexity=40, n_iter=300)
+tsneWheatResults = tsneWheat.fit_transform(xWheat_scaled)
 
-# groups = manifold_2D.groupby('category')
-# plt.title('2D Isomap Graph')
-# for name, group in groups:
-#     plt.plot(group['Component 1'], group['Component 2'], marker='o', linestyle='', markersize=5, label=name)
-# plt.legend()
-# plt.show()
+subsetWheatTSNE = pd.DataFrame(yWheat)
+subsetWheatTSNE['tsne-2d-one'] = tsneWheatResults[:,0]
+subsetWheatTSNE['tsne-2d-two'] = tsneWheatResults[:,1]
+plt.figure(figsize=(16,10))
+sns.scatterplot(
+    x="tsne-2d-one", y="tsne-2d-two", hue="label",
+    palette=sns.color_palette("hls", 22), 
+    data=subsetWheatTSNE,
+    legend="full", alpha=0.8)
 
-####3D########
-isomapWheat = Isomap(n_neighbors=35, n_components=3)
-isomapWheat.fit(xWheat_scaled)
-manifold_3Da = isomapWheat.transform(xWheat_scaled)
-manifold_3D = pd.DataFrame(manifold_3Da,
-    columns=['Component 1', 'Component 2','Component 3'])
-manifold_3D['category'] = yWheat.to_numpy()
-fig = px.scatter_3d(manifold_3D, x='Component 1', y='Component 2', z='Component 3', color='category',
-                    title='3D Isomap Graph')
-fig.show()
+plt.show()
