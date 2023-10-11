@@ -66,7 +66,7 @@ n_clusters = gs_obj(xWheat_scaled, n_refs=50, cluster_array=np.arange(1, 15))
 print('Optimal number of clusters: ', n_clusters)
 
 """ Clustering Jerárquico """
-gs_obj = OptimalK(n_jobs=1, n_iter=20)
+gs_obj = OptimalK(n_jobs=5, n_iter=50)
 n_clusters = gs_obj(xWheat_scaled.astype('float'), n_refs=60,
 cluster_array=np.arange(2, 10))
 print('Optimal number of clusters: ', n_clusters)
